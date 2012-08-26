@@ -32,7 +32,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.net.ssl.HostnameVerifier;
@@ -66,7 +66,7 @@ public class FileTransfer extends Plugin {
     public static int CONNECTION_ERR = 3;
     public static int ABORTED_ERR = 4;
 
-    private static HashMap abortTriggered = new HashMap();
+    private static HashSet abortTriggered = new HashSet();
 
     private SSLSocketFactory defaultSSLSocketFactory = null;
     private HostnameVerifier defaultHostnameVerifier = null;
@@ -308,7 +308,7 @@ public class FileTransfer extends Plugin {
                     success(progressResult, callbackId);
                 }
                 synchronized (abortTriggered) {
-                    if (objectId != null && abortTriggered.containsKey(objectId)) {
+                    if (objectId != null && abortTriggered.contains(objectId)) {
                         abortTriggered.remove(objectId);
                         throw new AbortException("upload aborted");
                     }
@@ -551,7 +551,7 @@ public class FileTransfer extends Plugin {
                         success(progressResult, callbackId);
                     }
                     synchronized (abortTriggered) {
-                        if (objectId != null && abortTriggered.containsKey(objectId)) {
+                        if (objectId != null && abortTriggered.contains(objectId)) {
                             abortTriggered.remove(objectId);
                             throw new AbortException("download aborted");
                         }
@@ -656,7 +656,7 @@ public class FileTransfer extends Plugin {
             return new PluginResult(PluginResult.Status.JSON_EXCEPTION, "Missing objectId");
         }
         synchronized (abortTriggered) {
-            abortTriggered.put(objectId, objectId);
+            abortTriggered.add(objectId);
         }
         return new PluginResult(PluginResult.Status.OK);
     }
