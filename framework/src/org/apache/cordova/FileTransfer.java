@@ -71,6 +71,12 @@ public class FileTransfer extends Plugin {
     private SSLSocketFactory defaultSSLSocketFactory = null;
     private HostnameVerifier defaultHostnameVerifier = null;
 
+    static class AbortException extends Exception {
+        public AbortException(String str) {
+            super(str);
+        }
+    }
+
     /* (non-Javadoc)
     * @see org.apache.cordova.api.Plugin#execute(java.lang.String, org.json.JSONArray, java.lang.String)
     */
@@ -113,12 +119,6 @@ public class FileTransfer extends Plugin {
      * @return FileUploadResult containing result of upload request
      */
     private PluginResult upload(String source, String target, JSONArray args, String callbackId) {
-        class AbortException extends Exception {
-            public AbortException(String str) {
-                super(str);
-            }
-        }
-
         Log.d(LOG_TAG, "upload " + source + " to " +  target);
 
         HttpURLConnection conn = null;
@@ -492,11 +492,6 @@ public class FileTransfer extends Plugin {
      * @return JSONObject 	the downloaded file
      */
     private PluginResult download(String source, String target, JSONArray args, String callbackId) {
-        class AbortException extends Exception {
-            public AbortException(String str) {
-                super(str);
-            }
-        }
         Log.d(LOG_TAG, "download " + source + " to " +  target);
 
         HttpURLConnection connection = null;
