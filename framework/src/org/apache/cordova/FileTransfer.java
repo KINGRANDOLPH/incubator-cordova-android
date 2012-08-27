@@ -530,6 +530,12 @@ public class FileTransfer extends Plugin {
                 long totalBytes = 0;
                 FileProgressResult progress = new FileProgressResult();
 
+                if (connection.getContentEncoding() == null) {
+                    // Only trust content-length header if no gzip etc
+                    progress.setLengthComputable(true);
+                    progress.setTotal(connection.getContentLength());
+                }
+
                 FileOutputStream outputStream = new FileOutputStream(file);
 
                 // write bytes to file
