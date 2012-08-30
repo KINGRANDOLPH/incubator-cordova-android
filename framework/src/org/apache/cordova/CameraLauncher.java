@@ -387,6 +387,10 @@ public class CameraLauncher extends Plugin implements MediaScannerConnectionClie
                     } else {
                         // Get the path to the image. Makes loading so much easier.
                         String imagePath = FileUtils.getRealPathFromURI(uri, this.cordova);
+                        if (imagePath == null) {
+                            this.failPicture("Cannot read this image type.");
+                            return;
+                        }
                         Bitmap bitmap = getScaledBitmap(imagePath);
 
                         if (this.correctOrientation) {
